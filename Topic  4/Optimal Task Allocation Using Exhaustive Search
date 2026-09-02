@@ -1,0 +1,40 @@
+from itertools import permutations
+
+def total_cost(allocation, cost_matrix):
+    total = 0
+
+    for worker, task in enumerate(allocation):
+        total += cost_matrix[worker][task]
+
+    return total
+
+
+def task_allocation(cost_matrix):
+    n = len(cost_matrix)
+    min_cost = float('inf')
+    best_allocation = None
+
+    for allocation in permutations(range(n)):
+        cost = total_cost(allocation, cost_matrix)
+
+        if cost < min_cost:
+            min_cost = cost
+            best_allocation = allocation
+
+    return best_allocation, min_cost
+
+
+# Test Case 1
+cost_matrix = [
+    [3, 10, 7],
+    [8, 5, 12],
+    [4, 6, 9]
+]
+
+allocation, cost = task_allocation(cost_matrix)
+
+print("Optimal Task Allocation:")
+for worker, task in enumerate(allocation):
+    print("Worker", worker + 1, "-> Task", task + 1)
+
+print("Total Cost:", cost)
