@@ -1,0 +1,29 @@
+import math
+
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0]) ** 2 +
+                     (p1[1] - p2[1]) ** 2)
+
+
+def closest_pair(points):
+    min_dist = float('inf')
+    pair = None
+
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            distance = euclidean_distance(points[i], points[j])
+
+            if distance < min_dist:
+                min_dist = distance
+                pair = (points[i], points[j])
+
+    return pair, min_dist
+
+
+points = [(1, 2), (4, 5), (7, 8), (3, 1)]
+
+pair, distance = closest_pair(points)
+
+print("Closest pair:", pair[0], "-", pair[1])
+print("Minimum distance:", distance)
+print("Time Complexity: O(n^2)")
