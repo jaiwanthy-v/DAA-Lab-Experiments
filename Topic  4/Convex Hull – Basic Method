@@ -1,0 +1,44 @@
+def orientation(a, b, c):
+    value = ((b[1] - a[1]) * (c[0] - b[0]) -
+             (b[0] - a[0]) * (c[1] - b[1]))
+
+    if value == 0:
+        return 0
+    elif value > 0:
+        return 1
+    else:
+        return 2
+
+
+def convex_hull(points):
+    hull = []
+
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            left = right = False
+
+            for k in range(len(points)):
+                if k == i or k == j:
+                    continue
+
+                o = orientation(points[i], points[j], points[k])
+
+                if o == 1:
+                    left = True
+                elif o == 2:
+                    right = True
+
+            if not (left and right):
+                hull.append(points[i])
+                hull.append(points[j])
+
+    return list(dict.fromkeys(hull))
+
+
+points = [(0, 0), (1, 1), (2, 2), (0, 2), (2, 0)]
+
+hull = convex_hull(points)
+
+print("Convex Hull Points:")
+for point in hull:
+    print(point)
