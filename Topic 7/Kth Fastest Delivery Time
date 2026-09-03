@@ -1,0 +1,40 @@
+def median_of_medians(arr, k):
+    if len(arr) <= 5:
+        return sorted(arr)[k]
+
+    medians = []
+
+    for i in range(0, len(arr), 5):
+        group = sorted(arr[i:i+5])
+        medians.append(group[len(group)//2])
+
+    pivot = median_of_medians(medians, len(medians)//2)
+
+    low = [x for x in arr if x < pivot]
+    equal = [x for x in arr if x == pivot]
+    high = [x for x in arr if x > pivot]
+
+    if k < len(low):
+        return median_of_medians(low, k)
+
+    elif k < len(low) + len(equal):
+        return pivot
+
+    else:
+        return median_of_medians(
+            high,
+            k - len(low) - len(equal)
+        )
+
+
+def kth_delivery_time(delivery_times, k):
+    return median_of_medians(delivery_times, k)
+
+
+delivery_times = [45, 30, 60, 25, 50,
+                  40, 35, 55, 20, 65]
+
+k = 2
+
+print("Kth fastest delivery time:",
+      kth_delivery_time(delivery_times, k))
