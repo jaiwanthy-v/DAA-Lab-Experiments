@@ -1,0 +1,19 @@
+def assembly_line(a, t, e, x):
+    n = len(a[0])
+    f1 = [e[0] + a[0][0]]
+    f2 = [e[1] + a[1][0]]
+
+    for i in range(1, n):
+        f1.append(min(f1[i-1] + a[0][i],
+                      f2[i-1] + t[1][i-1] + a[0][i]))
+        f2.append(min(f2[i-1] + a[1][i],
+                      f1[i-1] + t[0][i-1] + a[1][i]))
+
+    return min(f1[-1] + x[0], f2[-1] + x[1])
+
+a = [[4,3,5,2], [5,2,4,3]]
+t = [[1,2,1], [2,1,2]]
+e = [7,9]
+x = [8,6]
+
+print("Minimum Production Time =", assembly_line(a,t,e,x))
