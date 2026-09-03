@@ -1,0 +1,27 @@
+def partition(a, low, high):
+    pivot = a[high]
+    i = low - 1
+
+    for j in range(low, high):
+        if a[j] <= pivot:
+            i += 1
+            a[i], a[j] = a[j], a[i]
+
+    a[i + 1], a[high] = a[high], a[i + 1]
+    return i + 1
+
+def kth_smallest(a, low, high, k):
+    if low <= high:
+        p = partition(a, low, high)
+
+        if p == k - 1:
+            return a[p]
+        elif p > k - 1:
+            return kth_smallest(a, low, p - 1, k)
+        else:
+            return kth_smallest(a, p + 1, high, k)
+
+a = list(map(int, input().split()))
+k = int(input())
+
+print("K-th Smallest:", kth_smallest(a, 0, len(a) - 1, k))
