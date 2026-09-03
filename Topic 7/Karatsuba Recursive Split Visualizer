@@ -1,0 +1,37 @@
+def karatsuba_traced(x, y, trace, depth=0):
+    trace.append((depth, x, y))
+
+    if x < 10 or y < 10:
+        return x * y
+
+    n = max(len(str(x)), len(str(y)))
+    m = n // 2
+
+    high1 = x // 10**m
+    low1 = x % 10**m
+
+    high2 = y // 10**m
+    low2 = y % 10**m
+
+    z2 = karatsuba_traced(high1, high2, trace, depth + 1)
+    z0 = karatsuba_traced(low1, low2, trace, depth + 1)
+
+    z1 = (karatsuba_traced(high1 + low1,
+                          high2 + low2,
+                          trace,
+                          depth + 1)
+          - z2 - z0)
+
+    return z2 * 10**(2*m) + z1 * 10**m + z0
+
+
+trace = []
+
+result = karatsuba_traced(1234, 56, trace)
+
+print("Result:", result)
+
+for item in trace:
+    print("Depth:", item[0],
+          "X:", item[1],
+          "Y:", item[2])
