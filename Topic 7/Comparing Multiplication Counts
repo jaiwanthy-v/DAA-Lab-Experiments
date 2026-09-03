@@ -1,0 +1,22 @@
+def count_strassen(n):
+    if n <= 1:
+        return 1
+
+    k = 0
+    size = 1
+
+    while size < n:
+        size *= 2
+        k += 1
+
+    return 7 ** k
+
+
+def count_standard(n):
+    return n ** 3
+
+
+n = int(input("Enter matrix size: "))
+
+print("Strassen multiplications:", count_strassen(n))
+print("Standard multiplications:", count_standard(n))
