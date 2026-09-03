@@ -1,0 +1,51 @@
+def merge_sort(a, count):
+    if len(a) <= 1:
+        return a, count
+
+    mid = len(a) // 2
+    left, count = merge_sort(a[:mid], count)
+    right, count = merge_sort(a[mid:], count)
+
+    result = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        count += 1
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    return result + left[i:] + right[j:], count
+
+def quick_sort(a, low, high):
+    global qcount
+    if low < high:
+        pivot = a[high]
+        i = low - 1
+
+        for j in range(low, high):
+            qcount += 1
+            if a[j] <= pivot:
+                i += 1
+                a[i], a[j] = a[j], a[i]
+
+        a[i + 1], a[high] = a[high], a[i + 1]
+        p = i + 1
+
+        quick_sort(a, low, p - 1)
+        quick_sort(a, p + 1, high)
+
+a = list(map(int, input().split()))
+
+m, mcount = merge_sort(a.copy(), 0)
+
+qcount = 0
+q = a.copy()
+quick_sort(q, 0, len(q) - 1)
+
+print("Sorted Array:", *m)
+print("Merge Comparisons:", mcount)
+print("Quick Comparisons:", qcount)
