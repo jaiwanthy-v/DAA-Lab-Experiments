@@ -1,0 +1,77 @@
+def add(A, B):
+    n = len(A)
+    return [[A[i][j] + B[i][j] for j in range(n)] for i in range(n)]
+
+
+def sub(A, B):
+    n = len(A)
+    return [[A[i][j] - B[i][j] for j in range(n)] for i in range(n)]
+
+
+def strassen(A, B):
+    n = len(A)
+
+    if n == 1:
+        return [[A[0][0] * B[0][0]]]
+
+    m = n // 2
+
+    A11 = [r[:m] for r in A[:m]]
+    A12 = [r[m:] for r in A[:m]]
+    A21 = [r[:m] for r in A[m:]]
+    A22 = [r[m:] for r in A[m:]]
+
+    B11 = [r[:m] for r in B[:m]]
+    B12 = [r[m:] for r in B[:m]]
+    B21 = [r[:m] for r in B[m:]]
+    B22 = [r[m:] for r in B[m:]]
+
+    M1 = strassen(add(A11, A22), add(B11, B22))
+    M2 = strassen(add(A21, A22), B11)
+    M3 = strassen(A11, sub(B12, B22))
+    M4 = strassen(A22, sub(B21, B11))
+    M5 = strassen(add(A11, A12), B22)
+    M6 = strassen(sub(A21, A11), add(B11, B12))
+    M7 = strassen(sub(A12, A22), add(B21, B22))
+
+    C11 = add(sub(add(M1, M4), M5), M7)
+    C12 = add(M3, M5)
+    C21 = add(M2, M4)
+    C22 = add(sub(add(M1, M3), M2), M6)
+
+    return ([C11[i] + C12[i] for i in range(m)] +
+            [C21[i] + C22[i] for i in range(m)])
+
+
+def strassen_arbitrary(A, B):
+    rows = len(A)
+    cols = len(B[0])
+
+    size = max(len(A), len(A[0]), len(B), len(B[0]))
+    n = 1
+
+    while n < size:
+        n *= 2
+
+    Ap = [[0] * n for _ in range(n)]
+    Bp = [[0] * n for _ in range(n)]
+
+    for i in range(len(A)):
+        for j in range(len(A[0])):
+            Ap[i][j] = A[i][j]
+
+    for i in range(len(B)):
+        for j in range(len(B[0])):
+            Bp[i][j] = B[i][j]
+
+    C = strassen(Ap, Bp)
+
+    return [row[:cols] for row in C[:rows]]
+
+
+A = [[1, 2, 3], [4, 5, 6]]
+B = [[7, 8], [9, 10], [11, 12]]
+
+print("Result:")
+for row in strassen_arbitrary(A, B):
+    print(row)
