@@ -1,0 +1,34 @@
+import math
+
+
+def distance(p1, p2):
+    return math.sqrt((p1[0]-p2[0])**2 +
+                     (p1[1]-p2[1])**2)
+
+
+def check_spacing(nodes, min_safe_distance):
+    min_dist = float('inf')
+    pair = None
+
+    for i in range(len(nodes)):
+        for j in range(i + 1, len(nodes)):
+            d = distance(nodes[i], nodes[j])
+
+            if d < min_dist:
+                min_dist = d
+                pair = (nodes[i], nodes[j])
+
+    if min_dist < min_safe_distance:
+        return False, pair, min_dist
+
+    return True, pair, min_dist
+
+
+nodes = [(0,0), (10,10), (10.5,10.2),
+         (30,40), (31,41)]
+
+safe, pair, d = check_spacing(nodes, 1.0)
+
+print("Safe:", safe)
+print("Closest pair:", pair)
+print("Minimum distance:", d)
